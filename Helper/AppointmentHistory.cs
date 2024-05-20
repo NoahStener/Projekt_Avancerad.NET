@@ -9,7 +9,7 @@ namespace Projekt_Avancerad.NET.Helper
         public int AppointmentId {  get; set; }
         public DateTime ChangedAt { get; set; }
         public string ChangedBy { get; set; } 
-        public string ChangeType { get; set; }  //Updaterad eller borttagen t.ex
+        public string ChangeType { get; set; }  
         public string OldValue { get; set; }
         public string NewValue { get; set; }
     }

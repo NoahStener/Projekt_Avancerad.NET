@@ -21,7 +21,7 @@ namespace Projekt_Avancerad.NET.Controllers
             _mapper = mapper;
         }
 
-        //Funkar, hämtar kund med all information
+        //Funkar, hämtar kund med all information. kanske inte behövs
         [HttpGet("Get Customer with details/{custId:int}")]
         public async Task<ActionResult<Customer>> GetCustomerDetails(int custId)
         {
@@ -52,8 +52,8 @@ namespace Projekt_Avancerad.NET.Controllers
                 {
                     return NotFound("Customer not found");
                 }
-                var customerDto = _mapper.Map<CustomerDto>(customer);
-                return Ok(customerDto);
+                //var customerDto = _mapper.Map<CustomerDto>(customer);
+                return Ok(customer);
 
             }
             catch (Exception)
@@ -65,14 +65,12 @@ namespace Projekt_Avancerad.NET.Controllers
 
         //Funkar
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<CustomerDto>>> GetAllCustomers()
+        public async Task<ActionResult<IEnumerable<CustomerDto>>>GetAllCustomers()
         {
             try
             {
                 var customers = await _customerRepository.GetAll();
-
                 var customersDtos = _mapper.Map<IEnumerable<CustomerDto>>(customers);
-
                 return Ok(customersDtos);
             
             }
@@ -95,14 +93,8 @@ namespace Projekt_Avancerad.NET.Controllers
                 }
 
                 var createdCustomer = await _customerRepository.Add(newCustomer);
-                if (createdCustomer == null)
-                {
-                    return BadRequest("Failed to add new customer");
-                }
                 //201 Created om customer läggs till
                 return CreatedAtAction(nameof(GetSingleCustomer), new { custId = createdCustomer.CustomerID }, createdCustomer);
-
-
             }
             catch (Exception)
             {
@@ -156,9 +148,7 @@ namespace Projekt_Avancerad.NET.Controllers
 
         }
 
-
-
-        //Funkar, implementera DTO
+        //Funkar, implementera DTO ?
         [HttpGet("Customers with appointments current week")]
         public async Task<ActionResult<Customer>> GetCustomersWithAppointmentsThisWeek()
         {
@@ -167,9 +157,9 @@ namespace Projekt_Avancerad.NET.Controllers
                 var customers = await _customerRepository.GetCustomersWithAppointmentsThisWeek();
                 if (customers == null)
                 {
-
                     return NotFound("No Customers with appointments this week.");
                 }
+
                 return Ok(customers);
 
             }

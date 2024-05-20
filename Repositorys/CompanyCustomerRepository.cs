@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Projekt_Avancerad.NET.Data;
+using Projekt_Avancerad.NET.Dto;
 using Projekt_Avancerad.NET.Helper;
 using Projekt_Avancerad.NET.Interfaces;
 using ProjektModels;
@@ -64,16 +65,34 @@ namespace Projekt_Avancerad.NET.Repository
             return custWithAppointment;
         }
 
+        //Implentera dto
         public async Task<IEnumerable<Customer>> GetCustomersWithAppointmentsThisWeek()
         {
+            //Hämta nuvarande datum/tid
             var currentDate = DateTime.Now;
+
+            //hämta dagens veckodag som en int(0 = Söndag, 1 = Måndag osv)
             var currentDayOfWeek = (int)currentDate.DayOfWeek;
+
+            // Beräkna startdatumet för innevarande vecka(måndag)
             var startDateOfWeek = currentDate.AddDays(-currentDayOfWeek + (int)DayOfWeek.Monday);
+
+            // Beräkna slutdatumet för innevarande vecka (söndag, sista ögonblicket)
             var endDateOfWeek = startDateOfWeek.AddDays(7).AddTicks(-1);
 
             var customers = await _projektDbContext.Customers
-                .Include(c => c.Appointments)
                 .Where(c => c.Appointments.Any(a => a.StartDate >= startDateOfWeek && a.EndDate <= endDateOfWeek))
+                .Select(c => new Customer
+                {
+                    CustomerID = c.CustomerID,
+                    FirstName = c.FirstName,
+                    LastName = c.LastName,
+
+                    Appointments = c.Appointments
+                    .Where(a => a.StartDate >= startDateOfWeek && a.EndDate <= endDateOfWeek)
+                    .ToList()
+                })
+
                 .ToListAsync();
 
             return customers;

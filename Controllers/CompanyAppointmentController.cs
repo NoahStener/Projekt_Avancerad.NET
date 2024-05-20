@@ -24,7 +24,7 @@ namespace Projekt_Avancerad.NET.Controllers
 
         //kanske justera utan att använda dto
         [HttpGet("appointments/week/{weekNumber}/year{year}")]
-        public async Task<ActionResult> GetAppointmentsSpecificWeek(int weekNumber, int year)
+        public async Task<ActionResult<Appointment>> GetAppointmentsSpecificWeek(int weekNumber, int year)
         {
 
             try
@@ -34,8 +34,8 @@ namespace Projekt_Avancerad.NET.Controllers
                 {
                     return NotFound("No appointments was found for this week");
                 }
-                var appointmentDtos = _mapper.Map<IEnumerable<AppointmentDto>>(appointments);
-                return Ok(appointmentDtos);
+                //var appointmentDtos = _mapper.Map<IEnumerable<AppointmentDto>>(appointments);
+                return Ok(appointments);
             }
             catch (Exception)
             {
@@ -45,7 +45,7 @@ namespace Projekt_Avancerad.NET.Controllers
 
         //Funkar (justera lite)
         [HttpGet("appointments/month/{month}/year{year}")]
-        public async Task<ActionResult> GetAppointmentsSpecificMonth(int month, int year)
+        public async Task<ActionResult<Appointment>> GetAppointmentsSpecificMonth(int month, int year)
         {
             try
             {
@@ -54,8 +54,8 @@ namespace Projekt_Avancerad.NET.Controllers
                 {
                     return NotFound("No appointments for this month");
                 }
-                var appointmentDtos = _mapper.Map<IEnumerable<AppointmentDto>>(appointments);
-                return Ok(appointmentDtos);
+                //var appointmentDtos = _mapper.Map<IEnumerable<AppointmentDto>>(appointments);
+                return Ok(appointments);
             }
             catch (Exception)
             {
@@ -108,7 +108,7 @@ namespace Projekt_Avancerad.NET.Controllers
 
 
 
-        [HttpPut("Update Appointment {appointmentId:int}")]
+        [HttpPut("Update Appointment/{appointmentId:int}")]
         public async Task<ActionResult<Appointment>> UpdateAppointment(int appointmentId, Appointment updateAppointment)
         {
 
@@ -144,12 +144,7 @@ namespace Projekt_Avancerad.NET.Controllers
                 {
                     return BadRequest("New appointment data is missing");
                 }
-
                 var addedAppointment = await _appointmentRepository.Add(newAppointment);
-                if (addedAppointment == null)
-                {
-                    return BadRequest("Failed to add new customer");
-                }
                 //201 Created om customer läggs till
                 return CreatedAtAction(nameof(GetSingleAppointment), new { appointmentId = addedAppointment.AppointmentID }, addedAppointment);
             }

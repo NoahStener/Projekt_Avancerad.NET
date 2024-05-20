@@ -19,7 +19,6 @@ namespace Projekt_Avancerad.NET.Repository
             
         }
 
-        //Implementerat historik funktion
         public async Task<Appointment> Add(Appointment newEntity)
         {
             var appointment = await _projektDbContext.Appointments.AddAsync(newEntity);
