@@ -134,8 +134,6 @@ namespace Projekt_Avancerad.NET
 
             builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
-
-
             var app = builder.Build();
 
             //seed roles and users
@@ -144,8 +142,6 @@ namespace Projekt_Avancerad.NET
                 var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
                 userService.SeedRolesAndUsersAync().Wait();
             }
-
-
 
 
             // Configure the HTTP request pipeline.
