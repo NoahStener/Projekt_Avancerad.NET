@@ -5,7 +5,7 @@ using ProjektModels;
 namespace Projekt_Avancerad.NET.Interfaces
 {
     //Interface för kunderna, boka möte, avboka och updatera
-    public interface ICustomerAppointmentRepository
+    public interface ICustomer
     {
         Task<Appointment> BookAppointment(int custId, Appointment appointment);
         Task<Appointment> CancelAppointment(int custId, int appointmentId);

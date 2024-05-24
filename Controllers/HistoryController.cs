@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projekt_Avancerad.NET.Data;
@@ -7,6 +8,7 @@ namespace Projekt_Avancerad.NET.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class HistoryController : ControllerBase
     {
         private readonly ProjektDbContext _projektDbContext;

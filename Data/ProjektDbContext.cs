@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Projekt_Avancerad.NET.Helper;
 using ProjektModels;
 
 namespace Projekt_Avancerad.NET.Data
 {
-    public class ProjektDbContext : DbContext
+    public class ProjektDbContext : IdentityDbContext<IdentityUser>
     {
 
         public ProjektDbContext(DbContextOptions<ProjektDbContext> options) : base(options)

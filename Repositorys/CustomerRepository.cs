@@ -9,12 +9,12 @@ using ProjektModels;
 
 namespace Projekt_Avancerad.NET.Repository
 {
-    public class CustomerAppointmentRepository : ICustomerAppointmentRepository
+    public class CustomerRepository : ICustomer
     {
 
         private ProjektDbContext _projektDbContext;
         private readonly IMapper _mapper;
-        public CustomerAppointmentRepository(ProjektDbContext projektDbContext, IMapper mapper)
+        public CustomerRepository(ProjektDbContext projektDbContext, IMapper mapper)
         {
             _projektDbContext = projektDbContext;
             _mapper = mapper;

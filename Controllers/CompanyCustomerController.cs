@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Projekt_Avancerad.NET.Dto;
@@ -11,6 +12,7 @@ namespace Projekt_Avancerad.NET.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class CompanyCustomerController : ControllerBase
     {
         private readonly ICompanyCustomerRepository _customerRepository;

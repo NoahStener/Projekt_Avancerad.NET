@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Projekt_Avancerad.NET.Dto;
@@ -11,13 +12,14 @@ namespace Projekt_Avancerad.NET.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomerAppointmentController : ControllerBase
+    [Authorize(Roles = "Customer")]
+    public class CustomerController : ControllerBase
     {
-        private ICustomerAppointmentRepository _customerAppointmentRepository;
+        private ICustomer _customerRepository;
 
-        public CustomerAppointmentController(ICustomerAppointmentRepository customerAppointmentRepository)
+        public CustomerController(ICustomer customerRepository)
         {
-            _customerAppointmentRepository = customerAppointmentRepository;
+            _customerRepository = customerRepository;
         }
 
         //Funkar
@@ -26,12 +28,12 @@ namespace Projekt_Avancerad.NET.Controllers
         {
             try
             {
-                if (!await _customerAppointmentRepository.CustomerExists(custId))
+                if (!await _customerRepository.CustomerExists(custId))
                 {
                     return NotFound("Customer not found");
                 }
 
-                var newAppointment = await _customerAppointmentRepository.BookAppointment(custId, appointment);
+                var newAppointment = await _customerRepository.BookAppointment(custId, appointment);
                 if (newAppointment == null)
                 {
                     return BadRequest("Unable to book appointment.");
@@ -51,12 +53,12 @@ namespace Projekt_Avancerad.NET.Controllers
         {
             try
             {
-                if(!await _customerAppointmentRepository.CustomerExists(custId))
+                if(!await _customerRepository.CustomerExists(custId))
                 {
                     return NotFound("Customer not found");
                 }
 
-                var appointment = await _customerAppointmentRepository.CancelAppointment(custId, appointmentId);
+                var appointment = await _customerRepository.CancelAppointment(custId, appointmentId);
                 if(appointment == null)
                 {
                     return NotFound("Not found or already canceled");
@@ -76,7 +78,7 @@ namespace Projekt_Avancerad.NET.Controllers
         {
             try
             {
-                if (!await _customerAppointmentRepository.CustomerExists(custId))
+                if (!await _customerRepository.CustomerExists(custId))
                 {
                     return NotFound("No customer found");
                 }
@@ -85,7 +87,7 @@ namespace Projekt_Avancerad.NET.Controllers
                     return BadRequest();
                 }
                 
-                var appointment = await _customerAppointmentRepository.UpdateAppointment(custId, updateAppointment);
+                var appointment = await _customerRepository.UpdateAppointment(custId, updateAppointment);
                 if(appointment == null)
                 {
                     return NotFound("CustomerID or AppointmentID didnt match");
